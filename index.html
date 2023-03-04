@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet" />
+  <!--DayJS-->
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+  integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+  crossorigin="anonymous"></script>
+  <!-- CSS Framework -->
+<script src="https://cdn.tailwindcss.com" rel="stylesheet tailwind"></script>
+<link rel="stylesheet" href="./assets/stylesheet.css"/>
+  <!-- Tab Title -->
+<title>Weather Application</title>
+</head>
+<body>
+    <!-- Header -->
+    <header id="top-bar" class="text-6xl text-center text-white">Weather Dashboard</header>
+    <!-- Search bar -->
+    <div class="search-form">
+    <p class="text-2xl font-bold">Search for a City:</p></br>
+    <input class="border-4 border-solid p-2 text-center border-black text-xl rounded-md" type="text" id="name" name="name" placeholder="Enter your city" required></input></br>
+    <button class="search-city border-4 border-solid border-blue-500w rounded-lg p-1 text-xl text-center bg-blue-500 text-white">Search</button>
+    </div>
+    <!-- City & Date -->
+    <div class="current-city-block border-2 border-solid p-2 border-black text-xl rounded-am">
+      <h2 id="current-city"></h2>
+      <p class="current-conditions" id="temp"></p>
+      <p class="current-conditions" id="wind"></p>
+      <p class="current-conditions" id="humidity"></p>
+    </div>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="./assets/script.js"></script>
+</body>
+</html>

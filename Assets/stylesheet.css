@@ -1,0 +1,44 @@
+/* Header styling */
+#top-bar {
+  height: 125px;
+  background: #2050a4;
+  background: -moz-linear-gradient(left, #2050a4 0%, #5142cb 50%, #211b75 100%);
+  background: -webkit-linear-gradient(
+    left,
+    #2050a4 0%,
+    #5142cb 50%,
+    #211b75 100%
+  );
+  background: linear-gradient(to right, #2050a4 0%, #5142cb 50%, #211b75 100%);
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  margin: 20px; /* Change this value to adjust the distance from the top and left edges */
+}
+
+/* Adjusted the width of the search button */
+button, .search-city {
+  width: 150px;
+}
+
+/* Position & styling for current city block */
+.current-city-block {
+  margin-left: 40%;
+  margin-top: 2%;
+  width: 50%
+}
+
+#current-city {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.current-conditions{
+  font-size: larger;
+}
