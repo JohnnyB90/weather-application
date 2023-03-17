@@ -42,3 +42,47 @@ button, .search-city {
 .current-conditions{
   font-size: larger;
 }
+
+/* Table styling */
+table{
+  margin-left: 40%;
+  margin-top: 2%;
+  width: 50%;
+  /* visibility: hidden; */
+}
+table.fivedaytable {
+  width: 50%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #ffcc00;
+  border-style: solid;
+}
+td{
+  color: black;
+  font-size: large;
+  text-align: center;
+}
+th{
+  color: #fcfcfc;
+  text-align: center;
+}
+
+table.fivedaytable, td, table.fivedaytable th {
+  border-width: 2px;
+  border-color: #5142cb;
+  border-style: solid;
+  padding: 3px;
+}
+
+table.fivedaytable, thead {
+  background: #2050a4;
+  background: -moz-linear-gradient(left, #2050a4 0%, #5142cb 50%, #211b75 100%);
+  background: -webkit-linear-gradient(
+    left,
+    #2050a4 0%,
+    #5142cb 50%,
+    #211b75 100%
+  );
+  background: linear-gradient(to right, #2050a4 0%, #5142cb 50%, #211b75 100%);
+}
