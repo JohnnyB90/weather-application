@@ -48,8 +48,8 @@ table{
   margin-left: 40%;
   margin-top: 2%;
   width: 50%;
-  /* visibility: hidden; */
 }
+
 table.fivedaytable {
   width: 50%;
   background-color: #ffffff;
@@ -58,14 +58,30 @@ table.fivedaytable {
   border-color: #ffcc00;
   border-style: solid;
 }
+
 td{
   color: black;
   font-size: large;
   text-align: center;
 }
+
 th{
   color: #fcfcfc;
   text-align: center;
+}
+
+
+/* .trth {
+  display: none;
+}  */
+
+#seperate {
+  background-color: white;
+  color: black;
+  font-size: 2rem;
+  text-align: left;
+  border-bottom: 1px solid black;
+
 }
 
 table.fivedaytable, td, table.fivedaytable th {

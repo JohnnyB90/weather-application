@@ -60,78 +60,222 @@ navigator.geolocation.getCurrentPosition(function (position) {
       humidityDiv.textContent = `Humidity: ${humidity}%`;
     })
     // Error catch that will display if something is not working properly
-    .catch((error) => {
-      //   console.log("Unable to fetch that!");
-    });
-  // event handler for search button
-  searchBtn.addEventListener("click", (event) => {
-    event.preventDefault();
-    let cityInput = searchFormCity.value;
-    let stateInput = searchFormState.value;
-    console.log(cityInput);
-    console.log(stateInput);
-    // Construct the API URL with the city and state as the search query
-    fetch(
-      "https://api.openweathermap.org/geo/1.0/direct?q=" +
-        cityInput +
-        "," +
-        stateInput +
-        "&limit=1&appid=" +
-        apiKey
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        // Check if the API call returned any results
-        if (data.length > 0) {
-          // Get the latitude and longitude from the first result
-          const lat = data[0].lat;
-          const lon = data[0].lon;
-          // Log results
-          console.log("Latitude:", lat);
-          console.log("Longitude:", lon);
-          fetch(
-            "https://api.openweathermap.org/data/2.5/forecast?lat=" +
-              lat +
-              "&lon=" +
-              lon +
-              "&appid=" +
-              apiKey
-          )
-            .then((response) => response.json())
-            .then((data) => {
-                const weatherData = data.list;
-                const forecastData = [];
-              
-                // Loop through the weather data and only add data for each day at 12:00 PM
-                for (let i = 0; i < weatherData.length; i++) {
-                  const weather = weatherData[i];
-                  const date = new Date(weather.dt_txt);
-                  if (date.getHours() === 12) {
-                    forecastData.push(weather);
-                  }
-                }
-              console.log(forecastData);
-                // Loop through the forecastData array and extract the day of the week for each date
-                const daysOfWeek = [];
-                forecastData.forEach((day) => {
-                  const date = dayjs(day.dt_txt);
-                  const dayOfWeek = date.format('dddd');
-                  daysOfWeek.push(dayOfWeek);
+    .catch((error) => {});
+});
+// event handler for search button
+searchBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  let cityInput = searchFormCity.value;
+  let stateInput = searchFormState.value;
+  console.log(cityInput);
+  console.log(stateInput);
+
+  // Show the table
+  const tables = document.getElementsByClassName("trth");
+  for (let i = 0; i < tables.length; i++) {
+    tables[i].style.display = "table";
+    tables[i].style.width = "100%";
+  }
+
+  // Construct the API URL with the city and state as the search query
+  fetch(
+    "https://api.openweathermap.org/geo/1.0/direct?q=" +
+      cityInput +
+      "," +
+      stateInput +
+      "&limit=1&appid=" +
+      apiKey
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      // Check if the API call returned any results
+      if (data.length > 0) {
+        // Get the latitude and longitude from the first result
+        const lat = data[0].lat;
+        const lon = data[0].lon;
+        // Log results
+        console.log("Latitude:", lat);
+        console.log("Longitude:", lon);
+        fetch(
+          "https://api.openweathermap.org/data/2.5/forecast?lat=" +
+            lat +
+            "&lon=" +
+            lon +
+            "&appid=" +
+            apiKey
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error fetching data");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const weatherArray = [];
+            const mainArray = [];
+            const windArray = [];
+            console.log(data);
+
+            // Loop through the weather data and push the weather data to the weatherArray
+            for (let i = 0; i < data.list.length; i++) {
+              const forecast = data.list[i];
+              const date = new Date(forecast.dt_txt);
+              if (date.getHours() === 12) {
+                const weatherObj = {
+                  description: forecast.weather[0].description,
+                  icon: forecast.weather[0].icon,
+                };
+                weatherArray.push(weatherObj);
+              }
+            }
+
+            // Loop through the weather data and push the filtered and converted main data to the mainArray
+            for (let i = 0; i < data.list.length; i++) {
+              const forecast = data.list[i];
+              const date = new Date(forecast.dt_txt);
+              if (date.getHours() === 12) {
+                const tempF = (
+                  ((forecast.main.temp - 273.15) * 9) / 5 +
+                  32
+                ).toFixed(1);
+                const feelsLikeF = (
+                  ((forecast.main.feels_like - 273.15) * 9) / 5 +
+                  32
+                ).toFixed(1);
+                const mainObj = {
+                  temp: tempF,
+                  feels_like: feelsLikeF,
+                };
+                mainArray.push(mainObj);
+              }
+            }
+            // Define a function to convert wind direction in degrees to direction string
+            function degToCompass(num) {
+              const val = Math.floor(num / 22.5 + 0.5);
+              const arr = [
+                "N",
+                "NNE",
+                "NE",
+                "ENE",
+                "E",
+                "ESE",
+                "SE",
+                "SSE",
+                "S",
+                "SSW",
+                "SW",
+                "WSW",
+                "W",
+                "WNW",
+                "NW",
+                "NNW",
+              ];
+              return arr[val % 16];
+            }
+
+            // Loop through the weather data and push the wind data to the windArray
+            for (let i = 0; i < data.list.length; i++) {
+              const forecast = data.list[i];
+              const date = new Date(forecast.dt_txt);
+              if (date.getHours() === 12) {
+                const windObj = {
+                  speed: forecast.wind.speed,
+                  direction: degToCompass(forecast.wind.deg),
+                };
+                windArray.push(windObj);
+              }
+            }
+
+            // Log the forecast data
+            console.log("Weather:", weatherArray);
+            console.log("Main:", mainArray);
+            console.log("Wind:", windArray);
+          })
+          .catch((error) => {
+            console.error(error);
+
+            // Loop through the forecastData array and extract the day of the week for each date
+            const daysOfWeek = [];
+            forecastData.forEach((day) => {
+              const date = dayjs(day.dt_txt);
+              const dayOfWeek = date.format("MM/DD/YYYY");
+              daysOfWeek.push(dayOfWeek);
+            });
+
+            // Loop through the forecastData array and group the weather data by day
+            const weatherByDay = {};
+            forecastData.forEach((day) => {
+              const date = dayjs(day.dt_txt);
+              const dayOfWeek = date.format("MM/DD/YYYY");
+              const weather = day.weather[0];
+
+              if (!weatherByDay[dayOfWeek]) {
+                weatherByDay[dayOfWeek] = [];
+              }
+
+              weatherByDay[dayOfWeek].push(weather);
+            });
+
+            // Loop through each day of the week and append the weather data to the corresponding table cell
+            for (let i = 1; i <= daysOfWeek.length; i++) {
+              const dayOfWeek = daysOfWeek[i - 1];
+              const weatherData = weatherByDay[dayOfWeek];
+
+              const weatherCell = document.getElementById(`day${i}weather`);
+              let weatherText = "";
+
+              if (weatherData) {
+                weatherData.forEach((weather) => {
+                  const tempF = weather.temp.toFixed(1);
+                  const feelsLikeF = weather.feelsLike.toFixed(1);
+                  const windSpeed = weather.wind.speed.toFixed(1);
+                  const windDirection = weather.wind.direction;
+                  const iconCode = weather.iconCode;
+                  const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+                  const weatherDesc = weather.weatherDesc;
+                  const weatherString = `<img src="${iconUrl}" alt="${weatherDesc}"> ${weatherDesc}<br>Temp: ${tempF}&deg;F / Feels like: ${feelsLikeF}&deg;F<br>Wind: ${windSpeed} mph ${windDirection}`;
+                  weatherText += weatherString;
                 });
-                // Loop through the forecastData once again and assign one day per table header
-                for (let i = 1; i <= daysOfWeek.length; i++) {
-                    const header = document.getElementById(`day${i}`);
-                    header.textContent = daysOfWeek[i-1];
-                  }
-                console.log(daysOfWeek);
-              });
-        } else {
-          console.log("No results found.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  });
+              }
+
+              weatherCell.innerHTML = weatherText;
+            }
+
+            // Loop through each day of the week and append the weather data to the corresponding table cell
+            for (let i = 1; i <= daysOfWeek.length; i++) {
+              const dayOfWeek = daysOfWeek[i - 1];
+              const weatherData = weatherByDay[dayOfWeek];
+
+              const weatherCell = document.getElementById(`day${i}weather`);
+              let weatherText = "";
+
+              if (weatherData) {
+                weatherData.forEach((weather) => {
+                  weatherText += `${weather.main} (${weather.description})<br>`;
+                });
+              }
+
+              weatherCell.innerHTML = weatherText;
+            }
+
+            // Loop through the daysOfWeek array and assign one day per table header
+            for (let i = 1; i <= daysOfWeek.length; i++) {
+              const header = document.getElementById(`day${i}`);
+              header.textContent = daysOfWeek[i - 1];
+            }
+            console.log(daysOfWeek);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // If no results were returned, display an error message
+        console.log("Error: City not found");
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "City not found";
+        errorMessage.style.color = "red";
+        searchFormCity.insertAdjacentElement("afterend", errorMessage);
+      }
+    });
 });
