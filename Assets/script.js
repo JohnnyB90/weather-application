@@ -115,6 +115,7 @@ searchBtn.addEventListener("click", (event) => {
             const weatherArray = [];
             const mainArray = [];
             const windArray = [];
+            var forecastData = data.list.splice(0, 5);
             console.log(data);
 
             // Loop through the weather data and push the weather data to the weatherArray
@@ -191,10 +192,6 @@ searchBtn.addEventListener("click", (event) => {
             console.log("Weather:", weatherArray);
             console.log("Main:", mainArray);
             console.log("Wind:", windArray);
-          })
-          .catch((error) => {
-            console.error(error);
-
             // Loop through the forecastData array and extract the day of the week for each date
             const daysOfWeek = [];
             forecastData.forEach((day) => {
@@ -217,55 +214,39 @@ searchBtn.addEventListener("click", (event) => {
               weatherByDay[dayOfWeek].push(weather);
             });
 
-            // Loop through each day of the week and append the weather data to the corresponding table cell
-            for (let i = 1; i <= daysOfWeek.length; i++) {
-              const dayOfWeek = daysOfWeek[i - 1];
-              const weatherData = weatherByDay[dayOfWeek];
-
-              const weatherCell = document.getElementById(`day${i}weather`);
-              let weatherText = "";
-
-              if (weatherData) {
-                weatherData.forEach((weather) => {
-                  const tempF = weather.temp.toFixed(1);
-                  const feelsLikeF = weather.feelsLike.toFixed(1);
-                  const windSpeed = weather.wind.speed.toFixed(1);
-                  const windDirection = weather.wind.direction;
-                  const iconCode = weather.iconCode;
-                  const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
-                  const weatherDesc = weather.weatherDesc;
-                  const weatherString = `<img src="${iconUrl}" alt="${weatherDesc}"> ${weatherDesc}<br>Temp: ${tempF}&deg;F / Feels like: ${feelsLikeF}&deg;F<br>Wind: ${windSpeed} mph ${windDirection}`;
-                  weatherText += weatherString;
-                });
-              }
-
-              weatherCell.innerHTML = weatherText;
-            }
-
-            // Loop through each day of the week and append the weather data to the corresponding table cell
-            for (let i = 1; i <= daysOfWeek.length; i++) {
-              const dayOfWeek = daysOfWeek[i - 1];
-              const weatherData = weatherByDay[dayOfWeek];
-
-              const weatherCell = document.getElementById(`day${i}weather`);
-              let weatherText = "";
-
-              if (weatherData) {
-                weatherData.forEach((weather) => {
-                  weatherText += `${weather.main} (${weather.description})<br>`;
-                });
-              }
-
-              weatherCell.innerHTML = weatherText;
-            }
-
             // Loop through the daysOfWeek array and assign one day per table header
             for (let i = 1; i <= daysOfWeek.length; i++) {
               const header = document.getElementById(`day${i}`);
               header.textContent = daysOfWeek[i - 1];
             }
             console.log(daysOfWeek);
+            
+            // Loop through each day of the week and append the weather data to the corresponding table cell
+            for (let i = 1; i <= daysOfWeek.length; i++) {
+              const dayOfWeek = daysOfWeek[i - 1];
+              const weatherData = weatherByDay[dayOfWeek];
+              const weatherCell = document.getElementById(`day${i}weather`);
+              let weatherText = "";
+              if (weatherData) {
+                
+                const weather = weatherData[0]; 
+                const index = i - 1;
+                const tempF = mainArray[index].temp;
+                const feelsLikeF = mainArray[index].feels_like;
+                const windSpeed = windArray[index].speed;
+                const windDirection = windArray[index].direction;
+                const iconCode = weather.icon;
+                const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+                const weatherDesc = weather.description;
+                const weatherString = `<img src="${iconUrl}" alt="${weatherDesc}"> ${weatherDesc}<br>Temp: ${tempF}&deg;F / Feels like: ${feelsLikeF}&deg;F<br>Wind: ${windSpeed} mph ${windDirection}`;
+                weatherText = weatherString;
+              }
+
+              weatherCell.innerHTML = weatherText;
+            }
+            
           })
+
           .catch((error) => {
             console.error(error);
           });
