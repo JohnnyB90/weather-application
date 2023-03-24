@@ -12,6 +12,7 @@
   background: linear-gradient(to right, #2050a4 0%, #5142cb 50%, #211b75 100%);
 }
 
+/* Search for custimization */
 .search-form {
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@
   align-items: center;
   position: absolute;
   left: 0;
-  margin: 20px; /* Change this value to adjust the distance from the top and left edges */
+  margin: 20px; 
 }
 
 /* Adjusted the width of the search button */
@@ -51,7 +52,7 @@ table{
 }
 
 table.fivedaytable {
-  width: 50%;
+  width: 100px;
   background-color: #ffffff;
   border-collapse: collapse;
   border-width: 2px;
@@ -70,6 +71,9 @@ th{
   text-align: center;
 }
 
+tr{
+  width:100%
+}
 
 /* .trth {
   display: none;
@@ -81,7 +85,6 @@ th{
   font-size: 2rem;
   text-align: left;
   border-bottom: 1px solid black;
-
 }
 
 table.fivedaytable, td, table.fivedaytable th {
