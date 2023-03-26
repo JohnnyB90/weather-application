@@ -25,9 +25,16 @@
 
 /* Adjusted the width of the search button */
 button, .search-city {
-  width: 150px;
+  width: 350px;
 }
 
+hr {
+  width: 100%;
+}
+
+input {
+  width: 350px;
+}
 /* Position & styling for current city block */
 .current-city-block {
   margin-left: 40%;
@@ -51,6 +58,15 @@ table{
   width: 50%;
 }
 
+.weather-icon,
+.weather-desc {
+  display: inline-block;
+}
+
+.weather-icon img {
+  vertical-align: middle;
+}
+
 table.fivedaytable {
   width: 100px;
   background-color: #ffffff;
@@ -61,7 +77,7 @@ table.fivedaytable {
 }
 
 td{
-  color: black;
+  color: white;
   font-size: large;
   text-align: center;
 }
@@ -79,13 +95,6 @@ tr{
   display: none;
 }  */
 
-#seperate {
-  background-color: white;
-  color: black;
-  font-size: 2rem;
-  text-align: left;
-  border-bottom: 1px solid black;
-}
 
 table.fivedaytable, td, table.fivedaytable th {
   border-width: 2px;

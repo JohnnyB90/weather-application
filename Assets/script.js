@@ -115,9 +115,30 @@ searchBtn.addEventListener("click", (event) => {
             const weatherArray = [];
             const mainArray = [];
             const windArray = [];
-            var forecastData = data.list.splice(0, 5);
+            const forecastData = [];
+
+            // Keep track of the date of the most recent data
+            let lastDate = null;
+
+            // Loop through each item in the data list
+            for (const item of data.list) {
+              // Extract the date from the item's dt_txt property
+              const date = item.dt_txt.split(" ")[0];
+
+              // If this is a new date that hasn't been included yet, add it to the forecastData array
+              if (date !== lastDate) {
+                forecastData.push(item);
+                lastDate = date;
+              }
+
+              // If we've collected data for 5 days, stop collecting more data
+              if (forecastData.length >= 5) {
+                break;
+              }
+            }
+
             console.log(data);
-            console.log(forecastData)
+            console.log(forecastData);
 
             // Loop through the weather data and push the weather data to the weatherArray
             for (let i = 0; i < data.list.length; i++) {
@@ -148,6 +169,7 @@ searchBtn.addEventListener("click", (event) => {
                 const mainObj = {
                   temp: tempF,
                   feels_like: feelsLikeF,
+                  humidity: forecast.main.humidity,
                 };
                 mainArray.push(mainObj);
               }
@@ -193,6 +215,7 @@ searchBtn.addEventListener("click", (event) => {
             console.log("Weather:", weatherArray);
             console.log("Main:", mainArray);
             console.log("Wind:", windArray);
+
             // Loop through the forecastData array and extract the day of the week for each date
             const daysOfWeek = [];
             forecastData.forEach((day) => {
@@ -213,53 +236,57 @@ searchBtn.addEventListener("click", (event) => {
               }
 
               weatherByDay[dayOfWeek].push(weather);
+              console.log(weatherByDay);
             });
+
             console.log("Weather by day:", weatherByDay);
 
-            // Loop through the daysOfWeek array and assign one day per table header
-            for (let i = 1; i <= daysOfWeek.length; i++) {
-              const header = document.getElementById(`day${i}`);
-              header.textContent = daysOfWeek[i - 1];
-            }
-            console.log(daysOfWeek);
-            
-            console.log(`mainArray length: ${mainArray.length}`);
-            console.log(`windArray length: ${windArray.length}`);
-            console.log(`daysOfWeek: ${JSON.stringify(daysOfWeek)}`);
-            
-            for (let i = 1; i <= daysOfWeek.length; i++) {
-              const dayOfWeek = daysOfWeek[i - 1];
+            // Loop through each day of the week and update the table data with the weather
+            for (let i = 0; i < daysOfWeek.length; i++) {
+              const dayOfWeek = daysOfWeek[i];
               const weatherData = weatherByDay[dayOfWeek];
-              const weatherCell = document.getElementById(`day${i}weather`);
+              const weatherCell = document.getElementById(`day${i + 1}weather`);
               let weatherText = "";
+
               if (weatherData) {
-                const weather = weatherData[0]; 
-                const index = i - 1;
-                const mainData = mainArray[index];
-                if (mainData) {
-                  const tempF = mainData.temp;
-                  const feelsLikeF = mainData.feels_like;
-                  const windSpeed = windArray[index].speed;
-                  const windDirection = windArray[index].direction;
-                  const iconCode = weather.icon;
-                  const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
-                  const weatherDesc = weather.description;
-                  const weatherString = `<img src="${iconUrl}" alt="${weatherDesc}"> ${weatherDesc}<br>Temp: ${tempF}&deg;F / Feels like: ${feelsLikeF}&deg;F<br>Wind: ${windSpeed} mph ${windDirection}`;
-                  weatherText = weatherString;
-                  console.log(weatherText);
-                }
-                else {
-                  console.log(`No main data for day ${i} (${dayOfWeek})`);
-                }
+                const weather = weatherData[0];
+                const mainData = mainArray[i];
+                const windData = windArray[i];
+
+                // Get the date for the current day
+                const date = dayjs(dayOfWeek, "MM/DD/YYYY").format(
+                  "MMMM DD, YYYY"
+                );
+
+                // Construct the icon URL using the icon code
+                const iconCode = weather.icon;
+                const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+
+                // Build the weather string to display in the table cell
+                weatherText = `
+                  <div class="text-center mb-2">${date}</div>
+                  <div class="flex justify-center items-center">
+                    <div class="mr-2"><img src="${iconUrl}" alt="${weather.description}" class="w-10 h-10"></div>
+                    <div class="text-left">
+                      <div class="font-semibold">${weather.description}</div>
+                      <div>Temp: ${mainData.temp}&deg;F</div>
+                      <div>Feels like: ${mainData.feels_like}&deg;F</div>
+                      <div>Humidity: ${mainData.humidity}%</div>
+                      <div>Wind: ${windData.speed}mph ${windData.direction}</div>
+                    </div>
+                  </div>
+                `;
+              } else {
+                // Handle case where no weather data is available for the current day
+                weatherText = `
+                  <div class="text-center mb-2">${dayOfWeek}</div>
+                  <div>No weather data available</div>
+                `;
               }
-              else {
-                console.log(`No weather data for day ${i} (${dayOfWeek})`);
-              }
+
+              // Update the weather table cell with the weather string
               weatherCell.innerHTML = weatherText;
             }
-            
-            
-            
           })
 
           .catch((error) => {
