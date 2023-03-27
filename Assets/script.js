@@ -295,16 +295,23 @@ searchBtn.addEventListener("click", (event) => {
     });
 });
 
-
-
-
-
-
-
-
-
-
-
+// City search button for Charlotte
+const charlotteButton = document.getElementById("charlotte");
+charlotteButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  fetch(
+    "https://api.openweathermap.org/data/2.5/forecast?lat=33.7490&lon=-84.3880&appid=" +
+      apiKey
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      callWeather(35.2271, -80.8431);
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+    });
+});
+// City search button for Atlanta
 const atlantaButton = document.getElementById("atlanta");
 atlantaButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -321,6 +328,7 @@ atlantaButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for Denver
 const denverButton = document.getElementById("denver");
 denverButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -337,6 +345,7 @@ denverButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for Seattle
 const seattleButton = document.getElementById("seattle");
 seattleButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -353,6 +362,7 @@ seattleButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for San Francisco
 const sanfranciscoButton = document.getElementById("sanfran");
 sanfranciscoButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -369,6 +379,7 @@ sanfranciscoButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for Orlando
 const orlandoButton = document.getElementById("orlando");
 orlandoButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -385,6 +396,7 @@ orlandoButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for New York
 const newyorkButton = document.getElementById("newyork");
 newyorkButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -401,6 +413,7 @@ newyorkButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for Chicago
 const chicagoButton = document.getElementById("chicago");
 chicagoButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -417,6 +430,7 @@ chicagoButton.addEventListener("click", (event) => {
     });
 });
 
+// City search button for Austin
 const austinButton = document.getElementById("austin");
 austinButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -434,7 +448,7 @@ austinButton.addEventListener("click", (event) => {
 });
 
 
-
+// Call weather function for the quick search buttons. It does not have the geo location part of the api in from the input field search.
 function callWeather(lat, lon){
   fetch(
     "https://api.openweathermap.org/data/2.5/forecast?lat=" +
