@@ -23,13 +23,32 @@
   margin: 20px; 
 }
 
+.form-and-recent-cities {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10%;
+}
 /* Adjusted the width of the search button */
 button, .search-city {
-  width: 350px;
+  width: 355px;
 }
 
 hr {
   width: 100%;
+}
+
+#citysearchhr{
+  width: 130%;
+}
+#quicksearch{
+  margin-left:28%
+}
+.recent-city-button {
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 input {
@@ -41,7 +60,9 @@ input {
   margin-top: 2%;
   width: 50%
 }
-
+.search-section {
+  min-width: 00px;
+}
 #current-city {
   font-size: 25px;
 }
@@ -66,6 +87,7 @@ table{
   vertical-align: middle;
 }
 
+/* Table styling */
 table.fivedaytable {
   width: 100px;
   background-color: #ffffff;
@@ -89,10 +111,6 @@ th{
 tr{
   width:100%
 }
-
-/* .trth {
-  display: none;
-}  */
 
 
 table.fivedaytable, td, table.fivedaytable th {

@@ -61,20 +61,70 @@ navigator.geolocation.getCurrentPosition(function (position) {
     // Error catch that will display if something is not working properly
     .catch((error) => {});
 });
-// event handler for search button
+
+function addCityToLocalStorage(city) {
+  let recentCities = JSON.parse(localStorage.getItem("recentCities")) || [];
+
+  if (!recentCities.includes(city)) {
+    recentCities.push(city);
+
+    if (recentCities.length > 6) {
+      recentCities.shift();
+    }
+
+    localStorage.setItem("recentCities", JSON.stringify(recentCities));
+  }
+
+  renderCityButtons();
+}
+
+function getRecentCitiesFromLocalStorage() {
+  const storedCities = localStorage.getItem("recentCities");
+  return storedCities ? JSON.parse(storedCities) : [];
+}
+
+function renderCityButtons() {
+  const recentCitiesButtons = document.getElementById("recent-cities-buttons");
+  recentCitiesButtons.innerHTML = ""; // Clear any existing buttons
+
+  const recentCities = getRecentCitiesFromLocalStorage();
+  recentCities.forEach((city, index) => {
+    const cityButton = document.createElement("button");
+    cityButton.textContent = city;
+    cityButton.classList.add(
+      "bg-blue-400",
+      "text-white",
+      "rounded",
+      "py-2",
+      "px-4",
+      "mb-2",
+      "text-center"
+    );
+    cityButton.style.width = "150px"; // Set fixed width for the button
+    cityButton.setAttribute("data-index", index);
+    cityButton.addEventListener("click", (event) => {
+      const index = event.target.getAttribute("data-index");
+      const city = recentCities[index];
+      const [cityInputValue, stateInputValue] = city.split(", ");
+      searchFormCity.value = cityInputValue;
+      searchFormState.value = stateInputValue;
+      searchBtn.click();
+    });
+    recentCitiesButtons.appendChild(cityButton);
+
+    // Add a line break after each button
+    const lineBreak = document.createElement("br");
+    recentCitiesButtons.appendChild(lineBreak);
+  });
+}
+
+renderCityButtons();
+
 searchBtn.addEventListener("click", (event) => {
   event.preventDefault();
   let cityInput = searchFormCity.value;
   let stateInput = searchFormState.value;
 
-  // // Show the table
-  // const tables = document.getElementsByClassName("trth");
-  // for (let i = 0; i < tables.length; i++) {
-  //   tables[i].style.display = "table";
-  //   tables[i].style.width = "100%";
-  // }
-
-  // Construct the API URL with the city and state as the search query
   fetch(
     "https://api.openweathermap.org/geo/1.0/direct?q=" +
       cityInput +
@@ -82,18 +132,18 @@ searchBtn.addEventListener("click", (event) => {
       stateInput +
       "&limit=1&appid=" +
       apiKey
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      // Check if the API call returned any results
-      if (data.length > 0) {
-        // Get the latitude and longitude from the first result
-        const lat = data[0].lat;
-        const lon = data[0].lon;
-        // Log results
-        console.log("Latitude:", lat);
-        console.log("Longitude:", lon);
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.length > 0) {
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            console.log("Latitude:", lat);
+            console.log("Longitude:", lon);
+    
+            // Add city to local storage
+            addCityToLocalStorage(`${cityInput}, ${stateInput}`);
         fetch(
           "https://api.openweathermap.org/data/2.5/forecast?lat=" +
             lat +
@@ -110,6 +160,8 @@ searchBtn.addEventListener("click", (event) => {
           })
           .then((data) => {
             const cityName = data.city.name;
+            const cityState = `${cityInput}, ${stateInput}`;
+            addCityToLocalStorage(cityState);
             console.log(cityName);
             const weatherArray = [];
             const mainArray = [];
