@@ -3,7 +3,7 @@
 ## Website Photo and Link
 ```
 https://johnnyb90.github.io/weather-application/
-![2023-04-02 00_28_06-Window](https://user-images.githubusercontent.com/117334322/229331357-ccde3487-7f09-481e-9e92-a6f61da45609.png)
+![image](https://user-images.githubusercontent.com/117334322/229344111-9918ca34-3fb6-4d11-a722-f1f583999a4a.png)
 
 ```
 
