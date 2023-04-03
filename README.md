@@ -5,7 +5,7 @@ Weather Dashboard
 https://johnnyb90.github.io/weather-application/
 
 ## Website Photo
-![Screenshot](https://user-images.githubusercontent.com/117334322/229344111-9918ca34-3fb6-4d11-a722-f1f583999a4a.jpg)
+![image](https://user-images.githubusercontent.com/117334322/229386555-4fb86b16-4163-4566-b54d-dc9eb015ce98.png)
 
 
 ## Reason for creating this site/Description of website
