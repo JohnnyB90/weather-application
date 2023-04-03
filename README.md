@@ -1,11 +1,10 @@
 # Weather Dashboard
 
 ## Website Photo and Link
-```
+
 https://johnnyb90.github.io/weather-application/
 ![Screenshot](https://user-images.githubusercontent.com/117334322/229344111-9918ca34-3fb6-4d11-a722-f1f583999a4a.jpg)
 
-```
 
 ## Reason for creating this site/Description of website
 
